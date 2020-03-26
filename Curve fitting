@@ -1,0 +1,57 @@
+#importing libraries
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+#makind a dataset
+x = np.linspace(0,1,11)
+print(x)
+
+#defining the function
+t = [math.sin(i*2*math.pi) for i in x]
+print(t)
+
+#plotting the graph for the data
+fig = plt.figure()
+fig.suptitle('graph')
+plt.scatter(x,t,marker='.')
+
+#making noise as real life data set has noise
+noise = np.random.normal(0,0.1,x.size)
+print(noise)
+
+#adding noise 
+t = t+noise
+print(t)
+
+#plotting new graph
+plt.scatter(x,t,marker='.')
+
+#evaluating the matrix points
+n=len(x)
+sumx = sum(x)
+sumx2 = sum(x*x)
+sumx3 = sum(x*x*x)
+sumx4 = sum(x*x*x*x)
+sumx5 = sum(x*x*x*x*x)
+sumx6 = sum(x*x*x*x*x*x)
+sumt = sum(t)
+sumtx = sum(t*x)
+sumtx2 = sum(t*x*x)
+sumtx3 = sum(t*x*x*x)
+
+#Solving to find the weights
+A = np.array([[n,sumx,sumx2,sumx3],[sumx,sumx2,sumx3,sumx4],[sumx2,sumx3,sumx4,sumx5],[sumx3,sumx4,sumx5,sumx6]])
+B = np.array([[sumt],[sumtx],[sumtx2],[sumtx3]])
+
+W = np.matmul(np.linalg.inv(A),B);
+print(W)
+
+#predicting by applying the weights
+#y_pred = w0 + w1x1 + w2x2......
+t1 = [W[0][0] + W[1][0]*i+W[2][0]*i*i + W[3][0]*i*i*i for i in x]
+print(t1)
+
+#Visualizing our result
+plt.plot(x,t1)
+plt.scatter(x,t,marker='.')
